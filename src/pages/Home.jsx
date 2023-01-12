@@ -1,13 +1,20 @@
 import React, { Component } from 'react';
-import { getCategories } from '../services/api';
+import {
+  getCategories,
+  getProductsFromCategoryAndQuery,
+} from '../services/api';
 
-import Button from '../components/layout/Button';
+import LinkButton from '../components/layout/LinkButton';
 import RadioButton from '../components/layout/RadioButton';
+import Input from '../components/layout/Input';
+import SearchButton from '../components/layout/SearchButton';
+import ProductCard from './ProductCard';
 
 export default class Home extends Component {
   state = {
     search: '',
     categories: [],
+    products: [],
   };
 
   componentDidMount() {
@@ -21,8 +28,22 @@ export default class Home extends Component {
     this.setState({ categories });
   };
 
+  // Para cada caractere digitado, salva na variável search do state
+
+  handleChange = ({ target: { value } }) => {
+    this.setState({ search: value });
+  };
+
+  // Quando pressionado o botão 'Buscar produtos', faz a busca pelo produto que está salvo na variável search (do state) na API do mercado livre
+
+  handleClick = async () => {
+    const { search } = this.state;
+    const products = await getProductsFromCategoryAndQuery('', search);
+    this.setState({ products: products.results });
+  };
+
   render() {
-    const { search, categories } = this.state;
+    const { search, categories, products } = this.state;
 
     // Caso nenhuma pesquisa tenha sido feita ou nenhuma categoria tenha sido selecionada, a mensagem abaixo será exibida na página.
 
@@ -34,24 +55,53 @@ export default class Home extends Component {
 
     return (
       <div>
-        {!search && initialMessage}
+        {
+          /* Faz um map renderizando um radio button para cada categoria no estado. */
+          categories.map((category) => (
+            <div key={ category.id }>
+              <RadioButton
+                categoryName={ category.name }
+                text={ category.name }
+              />
+            </div>
+          ))
+        }
 
-        {/* Faz um map renderizando um radio button para cada categoria no estado. */}
-
-        {categories.map((category) => (
-          <div key={ category.id }>
-            <RadioButton
-              categoryName={ category.name }
-              text={ category.name }
-            />
-          </div>
-        ))}
-
-        <Button
+        <LinkButton
           route="/cart"
           dataTestId="shopping-cart-button"
           text="Carrinho"
         />
+
+        <Input
+          handleChange={ this.handleChange }
+          dataTestId="query-input"
+          placeholder="Digite sua pesquisa"
+        />
+
+        <SearchButton
+          dataTestId="query-button"
+          text="Buscar produtos"
+          handleClick={ this.handleClick }
+        />
+
+        {!search && initialMessage}
+
+        {
+          /* Faz um map para cada produto no termo de busca. */
+          products.length ? (
+            products.map((product) => (
+              <ProductCard
+                key={ product.id }
+                name={ product.title }
+                imageSrc={ product.thumbnail }
+                price={ product.price }
+              />
+            ))
+          ) : (
+            <p>Nenhum produto foi encontrado</p>
+          )
+        }
       </div>
     );
   }
