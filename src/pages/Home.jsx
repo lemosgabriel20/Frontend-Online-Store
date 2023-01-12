@@ -47,14 +47,14 @@ export default class Home extends Component {
     }
     this.setState({ category: prodId }, async () => {
       const products = await getProductsFromCategoryAndQuery(category, search);
-      this.setState({ products });
+      this.setState({ products: products.results });
     });
   };
 
   handleClick = async () => {
     const { search, category } = this.state;
     const products = await getProductsFromCategoryAndQuery(category, search);
-    this.setState({ products });
+    this.setState({ products: products.results });
   };
 
   render() {

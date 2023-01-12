@@ -18,7 +18,7 @@ const fetchProductsFromCategory = async (categoryId, query) => {
     !categoryId ? searchItems : searchItemsByCategory,
   );
   const data = await response.json();
-  return data.results;
+  return data;
 };
 
 const fetchProductDetails = async (id) => {
