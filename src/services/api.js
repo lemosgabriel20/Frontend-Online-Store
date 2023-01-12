@@ -8,11 +8,14 @@ const fetchCategories = async () => {
   return data;
 };
 
-// Faz a requisição para buscar entre os produtos de determinada categoria na API.
+/* Faz a requisição para buscar entre os produtos de determinada categoria na API.
+Caso categoryId seja fornecido, filtra por categoria, senão busca em todas as categorias. */
 
 const fetchProductsFromCategory = async (categoryId, query) => {
+  const searchItems = `https://api.mercadolibre.com/sites/MLB/search?q=${query}`;
+  const searchItemsByCategory = `https://api.mercadolibre.com/sites/MLB/search?category=${categoryId}&q=${query}`;
   const response = await fetch(
-    `https://api.mercadolibre.com/sites/MLB/search?category=${categoryId}&q=${query}`,
+    !categoryId ? searchItems : searchItemsByCategory,
   );
   const data = await response.json();
   return data;
