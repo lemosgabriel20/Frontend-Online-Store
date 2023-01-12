@@ -6,7 +6,7 @@ Ele recebe como props: name (para label, name, id) e text (texto do radio button
 
 export default class Checkbox extends Component {
   render() {
-    const { name, text, handleRadioClick, categoryId } = this.props;
+    const { name, text, handleCheckbox, categoryId } = this.props;
 
     return (
       <label
@@ -18,7 +18,7 @@ export default class Checkbox extends Component {
           name={ name }
           id={ categoryId }
           value={ categoryId }
-          onChange={ handleRadioClick }
+          onChange={ handleCheckbox }
         />
         {text}
       </label>

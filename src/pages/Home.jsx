@@ -37,26 +37,24 @@ export default class Home extends Component {
 
   // Quando pressionado o botão 'Buscar produtos', faz a busca pelo produto que está salvo na variável search (do state) na API do mercado livre
 
-  handleRadioClick = async (evt) => {
-    console.log(evt.target.checked);
+  handleCheckbox = async ({ target }) => {
+    let prodId;
     const { search, category } = this.state;
-    if (evt.target.checked) {
-      this.setState({ category: evt.target.id }, async () => {
-        const products = await getProductsFromCategoryAndQuery(category, search);
-        this.setState({ products: products.results });
-      });
+    if (target.checked) {
+      prodId = target.id;
     } else {
-      this.setState({ category: '' }, async () => {
-        const products = await getProductsFromCategoryAndQuery(category, search);
-        this.setState({ products: products.results });
-      });
+      prodId = '';
     }
+    this.setState({ category: prodId }, async () => {
+      const products = await getProductsFromCategoryAndQuery(category, search);
+      this.setState({ products });
+    });
   };
 
   handleClick = async () => {
     const { search, category } = this.state;
     const products = await getProductsFromCategoryAndQuery(category, search);
-    this.setState({ products: products.results });
+    this.setState({ products });
   };
 
   render() {
@@ -81,7 +79,7 @@ export default class Home extends Component {
                 name={ category.name }
                 text={ category.name }
                 categoryId={ category.id }
-                handleRadioClick={ this.handleRadioClick }
+                handleCheckbox={ this.handleCheckbox }
               />
             </div>
           ))
@@ -116,6 +114,7 @@ export default class Home extends Component {
                 name={ product.title }
                 imageSrc={ product.thumbnail }
                 price={ product.price }
+                id={ product.id }
               />
             ))
           ) : (
