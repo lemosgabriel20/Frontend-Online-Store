@@ -5,7 +5,7 @@ import {
 } from '../services/api';
 
 import LinkButton from '../components/layout/LinkButton';
-import RadioButton from '../components/layout/RadioButton';
+import Checkbox from '../components/layout/Checkbox';
 import Input from '../components/layout/Input';
 import SearchButton from '../components/layout/SearchButton';
 import ProductCard from './ProductCard';
@@ -77,7 +77,7 @@ export default class Home extends Component {
           // limpar categoria
           categories.map((category) => (
             <div key={ category.id }>
-              <RadioButton
+              <Checkbox
                 name={ category.name }
                 text={ category.name }
                 categoryId={ category.id }

@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 /* Esse componente renderiza radio buttons.
 Ele recebe como props: name (para label, name, id) e text (texto do radio button). */
 
-export default class RadioButton extends Component {
+export default class Checkbox extends Component {
   render() {
     const { name, text, handleRadioClick, categoryId } = this.props;
 
@@ -26,7 +26,7 @@ export default class RadioButton extends Component {
   }
 }
 
-RadioButton.propTypes = {
+Checkbox.propTypes = {
   name: PropTypes.string,
   text: PropTypes.string,
 }.isRequired;
