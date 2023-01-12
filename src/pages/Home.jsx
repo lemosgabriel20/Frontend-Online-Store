@@ -5,7 +5,7 @@ import {
 } from '../services/api';
 
 import LinkButton from '../components/layout/LinkButton';
-import RadioButton from '../components/layout/RadioButton';
+import Checkbox from '../components/layout/Checkbox';
 import Input from '../components/layout/Input';
 import SearchButton from '../components/layout/SearchButton';
 import ProductCard from './ProductCard';
@@ -39,7 +39,7 @@ export default class Home extends Component {
   handleClick = async () => {
     const { search } = this.state;
     const products = await getProductsFromCategoryAndQuery('', search);
-    this.setState({ products: products.results });
+    this.setState({ products });
   };
 
   render() {
@@ -59,7 +59,7 @@ export default class Home extends Component {
           /* Faz um map renderizando um radio button para cada categoria no estado. */
           categories.map((category) => (
             <div key={ category.id }>
-              <RadioButton
+              <Checkbox
                 categoryName={ category.name }
                 text={ category.name }
               />
@@ -96,6 +96,7 @@ export default class Home extends Component {
                 name={ product.title }
                 imageSrc={ product.thumbnail }
                 price={ product.price }
+                id={ product.id }
               />
             ))
           ) : (

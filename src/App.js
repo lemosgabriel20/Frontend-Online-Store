@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 import Home from './pages/Home';
+import ProductDetails from './pages/ProductDetails';
 import ShoppingCart from './pages/ShoppingCart';
 
 export default class App extends Component {
@@ -10,14 +11,20 @@ export default class App extends Component {
       <Switch>
         <Route
           exact
-          path="/"
-          component={ Home }
+          path="/product/:id"
+          component={ ProductDetails }
         />
 
         <Route
           exact
           path="/cart"
           component={ ShoppingCart }
+        />
+
+        <Route
+          exact
+          path="/"
+          component={ Home }
         />
       </Switch>
     );

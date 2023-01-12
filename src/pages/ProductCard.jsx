@@ -1,12 +1,13 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 /* Card para renderizar os produtos buscados na API.
 Recebe o nome, thumbnail e preço dos produtos como props. */
 
 export default class ProductCard extends Component {
   render() {
-    const { name, imageSrc, price } = this.props;
+    const { id, name, imageSrc, price } = this.props;
 
     return (
       <div data-testid="product">
@@ -16,6 +17,12 @@ export default class ProductCard extends Component {
           alt={ name }
         />
         <p>{price}</p>
+        <Link
+          to={ `/product/${id}` }
+          data-testid="product-detail-link"
+        >
+          Detalhes do produto
+        </Link>
       </div>
     );
   }
@@ -25,4 +32,5 @@ ProductCard.propTypes = {
   imageSrc: PropTypes.string,
   name: PropTypes.string,
   price: PropTypes.string,
+  id: PropTypes.string,
 }.isRequired;
