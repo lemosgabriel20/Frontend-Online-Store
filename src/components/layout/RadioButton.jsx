@@ -6,17 +6,19 @@ Ele recebe como props: name (para label, name, id) e text (texto do radio button
 
 export default class RadioButton extends Component {
   render() {
-    const { name, text } = this.props;
+    const { name, text, handleRadioClick, categoryId } = this.props;
 
     return (
       <label
-        htmlFor={ name }
+        htmlFor={ categoryId }
         data-testid="category"
       >
         <input
-          type="radio"
+          type="checkbox"
           name={ name }
-          id={ name }
+          id={ categoryId }
+          value={ categoryId }
+          onChange={ handleRadioClick }
         />
         {text}
       </label>
