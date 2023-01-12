@@ -8,12 +8,17 @@ export default class ShoppingCart extends Component {
   render() {
     const { shoppingList } = this.state;
 
-    if (!shoppingList.length) {
-      return (
-        <p data-testid="shopping-cart-empty-message">Seu carrinho está vazio</p>
-      );
-    }
+    // Caso a lista de produtos esteja vazia, a mensagem abaixo será exibida.
 
-    return <div>ShoppingCart</div>;
+    const emptyMessage = (
+      <p data-testid="shopping-cart-empty-message">Seu carrinho está vazio</p>
+    );
+
+    return (
+      <div>
+        {!shoppingList.length && emptyMessage}
+        ShoppingCart
+      </div>
+    );
   }
 }
