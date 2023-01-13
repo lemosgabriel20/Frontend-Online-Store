@@ -17,11 +17,14 @@ export default class Home extends Component {
     categories: [],
     products: [],
     cartProducts: [],
+    buttonClicked: false,
   };
 
   componentDidMount() {
     this.setCategories();
   }
+
+  // Atualiza o local storage quando a página é atualizada.
 
   componentDidUpdate() {
     const { cartProducts } = this.state;
@@ -35,6 +38,8 @@ export default class Home extends Component {
     this.setState({ categories });
   };
 
+  //  Adiciona itens ao local storage.
+
   addToLocalStorage = (cartProducts) => {
     localStorage.setItem('cartProducts', JSON.stringify(cartProducts));
   };
@@ -47,8 +52,10 @@ export default class Home extends Component {
     this.setState({ cartProducts: [...cartProducts, foundProduct] });
   };
 
+  // Salva no estado o termo de pesquisa.
+
   handleChange = ({ target: { value } }) => {
-    this.setState({ search: value });
+    this.setState({ search: value, buttonClicked: false });
   };
 
   // Quando pressionado o botão 'Buscar produtos', faz a busca pelo produto que está salvo na variável search (do state) na API do mercado livre
@@ -67,14 +74,17 @@ export default class Home extends Component {
     });
   };
 
+  // Faz uma requisição à API quando o botão de busca é clicado.
+
   handleClick = async () => {
     const { search, category } = this.state;
     const products = await getProductsFromCategoryAndQuery(category, search);
-    this.setState({ products: products.results });
+    this.setState({ products: products.results, buttonClicked: true });
   };
 
   render() {
-    const { search, categories, products } = this.state;
+    const { search, categories, products, buttonClicked } = this.state;
+    const noResults = !products.length && buttonClicked;
 
     // Caso nenhuma pesquisa tenha sido feita ou nenhuma categoria tenha sido selecionada, a mensagem abaixo será exibida na página.
 
@@ -122,8 +132,9 @@ export default class Home extends Component {
         {!search && initialMessage}
 
         {
-          /* Faz um map para cada produto no termo de busca. */
-          products.length ? (
+          /* Faz um map para cada produto no termo de busca.
+          Exibe mensagem de erro caso nenhum produto seja encontrado. */
+          !noResults ? (
             products.map((product) => (
               <ProductCard
                 key={ product.id }
