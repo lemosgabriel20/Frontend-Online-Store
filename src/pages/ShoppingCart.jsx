@@ -50,6 +50,8 @@ export default class ShoppingCart extends Component {
 
     // Renderiza a lista de produtos já filtrada (itens duplicados removidos).
 
+    // TODO: criar o componente CartProducts.
+
     return (
       <div>
         {!shoppingList || !shoppingList.length
