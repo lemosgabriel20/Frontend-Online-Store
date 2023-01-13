@@ -61,15 +61,10 @@ export default class Home extends Component {
   // Quando pressionado o botão 'Buscar produtos', faz a busca pelo produto que está salvo na variável search (do state) na API do mercado livre
 
   handleCheckbox = ({ target }) => {
-    let prodId;
-    const { search, category } = this.state;
-    if (target.checked) {
-      prodId = target.id;
-    } else {
-      prodId = '';
-    }
-    this.setState({ category: prodId }, async () => {
-      const products = await getProductsFromCategoryAndQuery(category, search);
+    const { search } = this.state;
+    const productId = target.id || '';
+    this.setState({ category: productId }, async () => {
+      const products = await getProductsFromCategoryAndQuery(productId, search);
       this.setState({ products: products.results });
     });
   };
