@@ -58,7 +58,8 @@ export default class Home extends Component {
     this.setState({ search: value, buttonClicked: false });
   };
 
-  // Quando pressionado o botão 'Buscar produtos', faz a busca pelo produto que está salvo na variável search (do state) na API do mercado livre
+  /* Quando pressionado o botão 'Buscar produtos', faz a busca pelo produto que está salvo na variável search (do state) na API do mercado livre.
+  Caso uma categoria esteja selecionada, essa categoria é usada como filtro. */
 
   handleCheckbox = ({ target }) => {
     const { search } = this.state;
