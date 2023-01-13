@@ -44,7 +44,7 @@ export default class Home extends Component {
     localStorage.setItem('cartProducts', JSON.stringify(cartProducts));
   };
 
-  // Para cada caractere digitado, salva na variável search do state
+  // Adiciona ao cartProducts (estado) o produto clicado.
 
   handleAddToCart = (id) => {
     const { cartProducts, products } = this.state;
