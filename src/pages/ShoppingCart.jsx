@@ -5,6 +5,15 @@ export default class ShoppingCart extends Component {
     shoppingList: [],
   };
 
+  componentDidMount() {
+    this.getFromLocalStorage();
+  }
+
+  getFromLocalStorage = () => {
+    const shoppingList = JSON.parse(localStorage.getItem('cartProducts')).reverse();
+    this.setState({ shoppingList });
+  };
+
   render() {
     const { shoppingList } = this.state;
 
@@ -14,11 +23,15 @@ export default class ShoppingCart extends Component {
       <p data-testid="shopping-cart-empty-message">Seu carrinho está vazio</p>
     );
 
-    return (
-      <div>
-        {!shoppingList.length && emptyMessage}
-        ShoppingCart
+    // TODO: criar função para definir a quantidade de produtos com base no ID.
+
+    const products = shoppingList.map((product, index) => (
+      <div key={ index }>
+        <p data-testid="shopping-cart-product-name">{product.title}</p>
+        <p data-testid="shopping-cart-product-quantity">1</p>
       </div>
-    );
+    ));
+
+    return <div>{!shoppingList ? emptyMessage : products}</div>;
   }
 }

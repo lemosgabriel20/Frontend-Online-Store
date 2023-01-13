@@ -16,10 +16,16 @@ export default class Home extends Component {
     category: '',
     categories: [],
     products: [],
+    cartProducts: [],
   };
 
   componentDidMount() {
     this.setCategories();
+  }
+
+  componentDidUpdate() {
+    const { cartProducts } = this.state;
+    this.addToLocalStorage(cartProducts);
   }
 
   // Assim que a página é carregada, as categorias de produtos são buscadas na API e setadas no estado do componente.
@@ -29,7 +35,17 @@ export default class Home extends Component {
     this.setState({ categories });
   };
 
+  addToLocalStorage = (cartProducts) => {
+    localStorage.setItem('cartProducts', JSON.stringify(cartProducts));
+  };
+
   // Para cada caractere digitado, salva na variável search do state
+
+  handleAddToCart = (id) => {
+    const { cartProducts, products } = this.state;
+    const foundProduct = products.find((element) => element.id === id);
+    this.setState({ cartProducts: [...cartProducts, foundProduct] });
+  };
 
   handleChange = ({ target: { value } }) => {
     this.setState({ search: value });
@@ -37,7 +53,7 @@ export default class Home extends Component {
 
   // Quando pressionado o botão 'Buscar produtos', faz a busca pelo produto que está salvo na variável search (do state) na API do mercado livre
 
-  handleCheckbox = async ({ target }) => {
+  handleCheckbox = ({ target }) => {
     let prodId;
     const { search, category } = this.state;
     if (target.checked) {
@@ -115,6 +131,7 @@ export default class Home extends Component {
                 imageSrc={ product.thumbnail }
                 price={ product.price }
                 id={ product.id }
+                handleAddToCart={ this.handleAddToCart }
               />
             ))
           ) : (
