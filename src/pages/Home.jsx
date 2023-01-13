@@ -44,7 +44,7 @@ export default class Home extends Component {
     localStorage.setItem('cartProducts', JSON.stringify(cartProducts));
   };
 
-  // Para cada caractere digitado, salva na variável search do state
+  // Adiciona ao cartProducts (estado) o produto clicado.
 
   handleAddToCart = (id) => {
     const { cartProducts, products } = this.state;
@@ -58,7 +58,8 @@ export default class Home extends Component {
     this.setState({ search: value, buttonClicked: false });
   };
 
-  // Quando pressionado o botão 'Buscar produtos', faz a busca pelo produto que está salvo na variável search (do state) na API do mercado livre
+  /* Quando pressionado o botão 'Buscar produtos', faz a busca pelo produto que está salvo na variável search (do state) na API do mercado livre.
+  Caso uma categoria esteja selecionada, essa categoria é usada como filtro. */
 
   handleCheckbox = ({ target }) => {
     const { search } = this.state;

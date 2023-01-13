@@ -30,8 +30,8 @@ export default class ProductDetails extends Component {
       this.setState({ avaliations: savedAvaliations });
     }
   }
-
-  addToLocalStorage = (id, avaliation) => {
+  
+addToLocalStorage = (id, avaliation) => {
     localStorage.setItem(id, JSON.stringify(avaliation));
   };
 
@@ -48,7 +48,8 @@ export default class ProductDetails extends Component {
       this.addToLocalStorage(id, state.avaliations);
     });
   };
-
+  
+  // Faz a requisição para a API dos detalhes do produto e salva no estado as informações.
   getProductDetails = async () => {
     const {
       match: {
