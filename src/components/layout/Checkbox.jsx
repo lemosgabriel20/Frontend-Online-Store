@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-/* Esse componente renderiza radio buttons.
+/* Esse componente renderiza checkboxes das categorias de produto.
 Ele recebe como props: name (para label, name, id) e text (texto do radio button). */
 
 export default class Checkbox extends Component {
