@@ -62,9 +62,9 @@ export default class Home extends Component {
 
   handleCheckbox = ({ target }) => {
     const { search } = this.state;
-    const productId = target.id || '';
-    this.setState({ category: productId }, async () => {
-      const products = await getProductsFromCategoryAndQuery(productId, search);
+    const category = target.id || '';
+    this.setState({ category }, async () => {
+      const products = await getProductsFromCategoryAndQuery(category, search);
       this.setState({ products: products.results });
     });
   };
