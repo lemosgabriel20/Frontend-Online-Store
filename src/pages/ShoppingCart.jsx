@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import CartProducts from './CartProducts';
 
 export default class ShoppingCart extends Component {
   state = {
@@ -104,8 +105,6 @@ export default class ShoppingCart extends Component {
 
     // Renderiza a lista de produtos já filtrada (itens duplicados removidos).
 
-    // TODO: criar o componente CartProducts.
-
     return (
       <div>
         {!shoppingList || !shoppingList.length
@@ -115,49 +114,18 @@ export default class ShoppingCart extends Component {
             const isDisabled = this.validateButton(quantity);
 
             return (
-              <div key={ product.id }>
-                <img
-                  src={ product.thumbnail }
-                  alt={ product.title }
-                />
-
-                <p data-testid="shopping-cart-product-name">
-                  {product.title}
-                </p>
-
-                <div>
-                  <button
-                    type="button"
-                    onClick={ () => this.decreaseQuantity(product.id) }
-                    disabled={ isDisabled }
-                    data-testid="product-decrease-quantity"
-                  >
-                    -
-                  </button>
-
-                  <p data-testid="shopping-cart-product-quantity">
-                    {`Qtd: ${quantity}`}
-                  </p>
-
-                  <button
-                    type="button"
-                    onClick={ () => this.increaseQuantity(product.id) }
-                    data-testid="product-increase-quantity"
-                  >
-                    +
-                  </button>
-                </div>
-
-                <p>{`Total: R$ ${quantity * product.price}`}</p>
-
-                <button
-                  type="button"
-                  data-testid="remove-product"
-                  onClick={ () => this.removeProduct(product.id) }
-                >
-                  Remover produto
-                </button>
-              </div>
+              <CartProducts
+                key={ product.id }
+                id={ product.id }
+                thumbnail={ product.thumbnail }
+                price={ product.price }
+                title={ product.title }
+                quantity={ quantity }
+                isDisabled={ isDisabled }
+                decreaseQuantity={ this.decreaseQuantity }
+                increaseQuantity={ this.increaseQuantity }
+                removeProduct={ this.removeProduct }
+              />
             );
           })}
       </div>
