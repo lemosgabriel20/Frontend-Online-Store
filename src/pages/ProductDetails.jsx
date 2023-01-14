@@ -10,7 +10,9 @@ export default class ProductDetails extends Component {
     name: '',
     price: '',
     image: '',
+    product: {},
     avaliations: [],
+    cartProducts: [],
   };
 
   componentDidMount() {
@@ -31,8 +33,27 @@ export default class ProductDetails extends Component {
     }
   }
 
+  // Essa função é especifica para o 'cartProducts'!
+  addCartToLocalStorage = (cartProducts) => {
+    localStorage.setItem('cartProducts', JSON.stringify(cartProducts));
+  };
+
   addToLocalStorage = (id, avaliation) => {
     localStorage.setItem(id, JSON.stringify(avaliation));
+  };
+
+  // Recebe as informações do produto e faz checagem se há outro(s) produto(s) no localStorage
+  // para adicionar as novas informações de produto
+  handleAddToCart = (product) => {
+    const { cartProducts } = this.state;
+    const savedProducts = JSON.parse(localStorage.getItem('cartProducts'));
+    savedProducts.forEach((prod) => {
+      this.setState({ cartProducts: [...cartProducts, prod] });
+    });
+    this.setState({ cartProducts: [...cartProducts, product] }, () => {
+      const { state } = this;
+      this.addCartToLocalStorage(state.cartProducts);
+    });
   };
 
   // Envia as avaliações para o localStorage
@@ -61,11 +82,12 @@ export default class ProductDetails extends Component {
       name: response.title,
       price: response.price,
       image: response.pictures[0].url,
+      product: response,
     });
   };
 
   render() {
-    const { name, image, price, avaliations } = this.state;
+    const { name, image, price, avaliations, product } = this.state;
     const {
       match: {
         params: { id },
@@ -80,6 +102,14 @@ export default class ProductDetails extends Component {
         />
         <p data-testid="product-detail-name">{name}</p>
         <p data-testid="product-detail-price">{`R$ ${price}`}</p>
+
+        <button
+          data-testid="product-detail-add-to-cart"
+          type="button"
+          onClick={ () => this.handleAddToCart(product) }
+        >
+          Adicionar ao carrinho
+        </button>
 
         <LinkButton
           route="/cart"
