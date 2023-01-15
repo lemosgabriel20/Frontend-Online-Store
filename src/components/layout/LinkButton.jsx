@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 
 /* Este componente ao ser clicado direciona para outra rota na aplicação.
 Ele recebe como props: route (rota que será direcionada), dataTestId (string para validação do teste) e text (texto que será exibido no botão). */
-
 export default class LinkButton extends Component {
   render() {
     const { route, dataTestId, text } = this.props;
