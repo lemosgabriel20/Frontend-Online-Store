@@ -25,27 +25,23 @@ export default class Home extends Component {
   }
 
   // Atualiza o local storage quando a página é atualizada.
-
   componentDidUpdate() {
     const { cartProducts } = this.state;
     this.addToLocalStorage(cartProducts);
   }
 
   // Assim que a página é carregada, as categorias de produtos são buscadas na API e setadas no estado do componente.
-
   setCategories = async () => {
     const categories = await getCategories();
     this.setState({ categories });
   };
 
   //  Adiciona itens ao local storage.
-
   addToLocalStorage = (cartProducts) => {
     localStorage.setItem('cartProducts', JSON.stringify(cartProducts));
   };
 
   // Adiciona ao cartProducts (estado) o produto clicado.
-
   handleAddToCart = (id) => {
     const { cartProducts, products } = this.state;
     const foundProduct = products.find((element) => element.id === id);
@@ -53,14 +49,12 @@ export default class Home extends Component {
   };
 
   // Salva no estado o termo de pesquisa.
-
   handleChange = ({ target: { value } }) => {
     this.setState({ search: value, buttonClicked: false });
   };
 
   /* Quando pressionado o botão 'Buscar produtos', faz a busca pelo produto que está salvo na variável search (do state) na API do mercado livre.
   Caso uma categoria esteja selecionada, essa categoria é usada como filtro. */
-
   handleCheckbox = ({ target }) => {
     const { search } = this.state;
     const category = target.id || '';
@@ -71,7 +65,6 @@ export default class Home extends Component {
   };
 
   // Faz uma requisição à API quando o botão de busca é clicado.
-
   handleClick = async () => {
     const { search, category } = this.state;
     const products = await getProductsFromCategoryAndQuery(category, search);
@@ -83,7 +76,6 @@ export default class Home extends Component {
     const noResults = !products.length && buttonClicked;
 
     // Caso nenhuma pesquisa tenha sido feita ou nenhuma categoria tenha sido selecionada, a mensagem abaixo será exibida na página.
-
     const initialMessage = (
       <p data-testid="home-initial-message">
         Digite algum termo de pesquisa ou escolha uma categoria.
@@ -117,6 +109,8 @@ export default class Home extends Component {
           handleChange={ this.handleChange }
           dataTestId="query-input"
           placeholder="Digite sua pesquisa"
+          name="search"
+          value={ search }
         />
 
         <SearchButton

@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 
 /* Esse componente renderiza checkboxes das categorias de produto.
 Ele recebe como props: name (para label, name, id) e text (texto do radio button). */
-
 export default class Checkbox extends Component {
   render() {
     const { name, text, handleCheckbox, categoryId } = this.props;

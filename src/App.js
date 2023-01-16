@@ -4,6 +4,7 @@ import { Route, Switch } from 'react-router-dom';
 import Home from './pages/Home';
 import ProductDetails from './pages/ProductDetails';
 import ShoppingCart from './pages/ShoppingCart';
+import Checkout from './pages/Checkout';
 
 export default class App extends Component {
   render() {
@@ -19,6 +20,12 @@ export default class App extends Component {
           exact
           path="/cart"
           component={ ShoppingCart }
+        />
+
+        <Route
+          exact
+          path="/checkout"
+          component={ Checkout }
         />
 
         <Route

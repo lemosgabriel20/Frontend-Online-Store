@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { getProductById } from '../services/api';
+
 import LinkButton from '../components/layout/LinkButton';
-import AvalForm from '../components/layout/AvalForm';
-import AvalCard from '../components/layout/AvalCard';
+import AvalForm from './AvalForm';
+import AvalCard from './AvalCard';
 
 export default class ProductDetails extends Component {
   state = {
