@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-export default class AvalForm extends Component {
+export default class EvaluationForm extends Component {
   state = {
     emailValue: '',
     starValue: '',
@@ -16,7 +16,7 @@ export default class AvalForm extends Component {
     }
   }
 
-  // "Desenha" as estrelas (checkbox) na tea
+  // "Desenha" as estrelas (checkbox) na tela
   drawRatings = (stars, ratings, handleRating) => {
     for (let i = 1; i <= ratings; i += 1) {
       const testId = `${i}-rating`;
@@ -55,7 +55,7 @@ export default class AvalForm extends Component {
   handleSubmit = (evt) => {
     evt.preventDefault();
     const { emailValue, starValue, textValue } = this.state;
-    const { updateAvaliations } = this.props;
+    const { updateEvaluations } = this.props;
     if (
       emailValue.length === 0
       || starValue.length === 0
@@ -63,10 +63,10 @@ export default class AvalForm extends Component {
     ) {
       this.setState({ invalidForm: true });
     } else {
-      const avaliation = { email: emailValue, text: textValue, rating: starValue };
+      const evaluation = { email: emailValue, text: textValue, rating: starValue };
       this.setState({ emailValue: '', textValue: '' });
       this.setState({ invalidForm: false });
-      updateAvaliations(avaliation);
+      updateEvaluations(evaluation);
       // Renderizar no ProductDetails.jsx
     }
   };
@@ -86,7 +86,7 @@ export default class AvalForm extends Component {
           required
         />
 
-        { /* Aqui renderiza as estrelas(checkboxs) */ }
+        { /* Aqui renderiza as estrelas (checkboxes) */ }
         { stars }
 
         <textarea
@@ -110,7 +110,7 @@ export default class AvalForm extends Component {
   }
 }
 
-AvalForm.propTypes = {
+EvaluationForm.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
       id: PropTypes.string,

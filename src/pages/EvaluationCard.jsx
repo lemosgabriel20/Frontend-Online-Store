@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-export default class AvalCard extends Component {
+export default class EvaluationCard extends Component {
   render() {
     const { email, rating, text } = this.props;
     return (
@@ -14,7 +14,7 @@ export default class AvalCard extends Component {
   }
 }
 
-AvalCard.propTypes = {
+EvaluationCard.propTypes = {
   email: PropTypes.string,
   rating: PropTypes.string,
   text: PropTypes.string,

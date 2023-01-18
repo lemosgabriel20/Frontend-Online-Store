@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { getProductById } from '../services/api';
 
 import LinkButton from '../components/layout/LinkButton';
-import AvalForm from './AvalForm';
-import AvalCard from './AvalCard';
+import EvaluationForm from './EvaluationForm';
+import EvaluationCard from './EvaluationCard';
 
 export default class ProductDetails extends Component {
   state = {
@@ -12,12 +12,15 @@ export default class ProductDetails extends Component {
     price: '',
     image: '',
     product: {},
-    avaliations: [],
+    evaluations: [],
     cartProducts: [],
+    cartSize: 0,
   };
 
   componentDidMount() {
     this.getProductDetails();
+    this.getFromLocalStorage();
+    this.getCartSize();
 
     // Garante que exista um localStorage próprio para a id do produto
     const {
@@ -25,49 +28,56 @@ export default class ProductDetails extends Component {
         params: { id },
       },
     } = this.props;
-    const { avaliations } = this.state;
+    const { evaluations } = this.state;
     if (!localStorage.getItem(id)) {
-      localStorage.setItem(id, JSON.stringify(avaliations));
+      localStorage.setItem(id, JSON.stringify(evaluations));
     } else {
-      const savedAvaliations = (JSON.parse(localStorage.getItem(id)));
-      this.setState({ avaliations: savedAvaliations });
+      const savedEvaluations = (JSON.parse(localStorage.getItem(id)));
+      this.setState({ evaluations: savedEvaluations });
     }
   }
 
+  componentDidUpdate() {
+    const { cartProducts, cartSize } = this.state;
+    this.addCartToLocalStorage(cartProducts, cartSize);
+  }
+
+  // Busca produtos salvos no local storage.
+  getFromLocalStorage = () => {
+    const cartProducts = JSON.parse(localStorage.getItem('cartProducts'));
+    if (cartProducts) {
+      this.setState({ cartProducts }, () => this.getCartSize());
+    }
+  };
+
   // Essa função é especifica para o 'cartProducts'!
-  addCartToLocalStorage = (cartProducts) => {
+  addCartToLocalStorage = (cartProducts, cartSize) => {
     localStorage.setItem('cartProducts', JSON.stringify(cartProducts));
+    localStorage.setItem('cartSize', JSON.stringify(cartSize));
   };
 
-  addToLocalStorage = (id, avaliation) => {
-    localStorage.setItem(id, JSON.stringify(avaliation));
+  addToLocalStorage = (id, evaluation) => {
+    localStorage.setItem(id, JSON.stringify(evaluation));
   };
 
-  // Recebe as informações do produto e faz checagem se há outro(s) produto(s) no localStorage
-  // para adicionar as novas informações de produto
-  handleAddToCart = (product) => {
-    const { cartProducts } = this.state;
-    const savedProducts = JSON.parse(localStorage.getItem('cartProducts'));
-    savedProducts.forEach((prod) => {
-      this.setState({ cartProducts: [...cartProducts, prod] });
-    });
-    this.setState({ cartProducts: [...cartProducts, product] }, () => {
-      const { state } = this;
-      this.addCartToLocalStorage(state.cartProducts);
-    });
+  // Adiciona ao cartProducts (estado) o produto clicado.
+  handleAddToCart = () => {
+    const { cartProducts, product } = this.state;
+    const updatedCartProducts = [...cartProducts, product];
+    this.setState({ cartProducts: updatedCartProducts }, () => this.getCartSize());
   };
 
   // Envia as avaliações para o localStorage
-  updateAvaliations = (avaliationObject) => {
-    const { avaliations } = this.state;
+  updateEvaluations = (evaluationObject) => {
+    const { evaluations } = this.state;
     const {
       match: {
         params: { id },
       },
     } = this.props;
-    this.setState({ avaliations: [...avaliations, avaliationObject] }, () => {
+    this.setState({ evaluations: [...evaluations, evaluationObject] }, () => {
       const { state } = this;
-      this.addToLocalStorage(id, state.avaliations);
+      this.addToLocalStorage(id, state.evaluations);
     });
   };
 
@@ -87,8 +97,17 @@ export default class ProductDetails extends Component {
     });
   };
 
+  // Atualiza a quantidade de itens no carrinho.
+  getCartSize = () => {
+    const getCartProducts = JSON.parse(localStorage.getItem('cartProducts'));
+    if (getCartProducts) {
+      const cartSize = getCartProducts.length;
+      this.setState({ cartSize });
+    }
+  };
+
   render() {
-    const { name, image, price, avaliations, product } = this.state;
+    const { name, image, price, evaluations, product, cartSize } = this.state;
     const {
       match: {
         params: { id },
@@ -116,12 +135,13 @@ export default class ProductDetails extends Component {
           route="/cart"
           dataTestId="shopping-cart-button"
           text="Carrinho"
+          cartSize={ cartSize }
         />
 
-        <AvalForm productId={ id } updateAvaliations={ this.updateAvaliations } />
-        { avaliations.length > 0 ? (
-          avaliations.map((aval, index) => (
-            <AvalCard
+        <EvaluationForm productId={ id } updateEvaluations={ this.updateEvaluations } />
+        { evaluations.length > 0 ? (
+          evaluations.map((aval, index) => (
+            <EvaluationCard
               key={ index }
               email={ aval.email }
               rating={ aval.rating }
