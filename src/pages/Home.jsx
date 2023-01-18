@@ -155,6 +155,7 @@ export default class Home extends Component {
                 price={ product.price }
                 id={ product.id }
                 handleAddToCart={ this.handleAddToCart }
+                hasFreeShipping={ product.shipping.free_shipping }
               />
             ))
           ) : (

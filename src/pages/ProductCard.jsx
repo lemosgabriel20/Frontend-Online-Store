@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 Recebe o nome, thumbnail e preço dos produtos como props. */
 export default class ProductCard extends Component {
   render() {
-    const { id, name, imageSrc, price, handleAddToCart } = this.props;
+    const { id, name, imageSrc, price, handleAddToCart, hasFreeShipping } = this.props;
 
     return (
       <div data-testid="product">
@@ -17,6 +17,7 @@ export default class ProductCard extends Component {
           alt={ name }
         />
 
+        {hasFreeShipping && <p data-testid="free-shipping">Frete Grátis</p>}
         <p>{price}</p>
 
         <Link
@@ -44,4 +45,5 @@ ProductCard.propTypes = {
   price: PropTypes.string,
   id: PropTypes.string,
   handleAddToCart: PropTypes.func,
+  hasFreeShipping: PropTypes.func,
 }.isRequired;
