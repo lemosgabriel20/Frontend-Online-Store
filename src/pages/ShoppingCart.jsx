@@ -6,6 +6,7 @@ import LinkButton from '../components/layout/LinkButton';
 export default class ShoppingCart extends Component {
   state = {
     cartProducts: [],
+    cartSize: 0,
   };
 
   // Busca os produtos no local storage assim que a página carrega.
@@ -18,14 +19,23 @@ export default class ShoppingCart extends Component {
 
   // Atualiza o local storage quando a página atualiza.
   componentDidUpdate() {
-    const { cartProducts } = this.state;
-    this.addToLocalStorage(cartProducts);
+    const { cartProducts, cartSize } = this.state;
+    this.addToLocalStorage(cartProducts, cartSize);
   }
+
+  // Atualiza a quantidade de itens no carrinho.
+  getCartSize = () => {
+    const getCartProducts = JSON.parse(localStorage.getItem('cartProducts'));
+    if (getCartProducts) {
+      const cartSize = getCartProducts.length;
+      this.setState({ cartSize });
+    }
+  };
 
   // Busca produtos salvos no local storage.
   getFromLocalStorage = () => {
     const cartProducts = JSON.parse(localStorage.getItem('cartProducts'));
-    this.setState({ cartProducts });
+    this.setState({ cartProducts }, () => this.getCartSize());
   };
 
   // Determina a quantidade de produtos com base no ID.
@@ -46,15 +56,19 @@ export default class ShoppingCart extends Component {
   };
 
   //  Adiciona itens ao local storage.
-  addToLocalStorage = (cartProducts) => {
+  addToLocalStorage = (cartProducts, cartSize) => {
     localStorage.setItem('cartProducts', JSON.stringify(cartProducts));
+    localStorage.setItem('cartSize', JSON.stringify(cartSize));
   };
 
   // Busca o produto com base no ID e o adiciona novamente ao cartProducts.
   increaseQuantity = (id) => {
     const { cartProducts } = this.state;
     const foundProduct = cartProducts.find((product) => product.id === id);
-    this.setState({ cartProducts: [...cartProducts, foundProduct] });
+    this.setState(
+      { cartProducts: [...cartProducts, foundProduct] },
+      () => this.getCartSize(),
+    );
   };
 
   // Filtra o cartProducts removendo produtos com o ID informado.
@@ -72,20 +86,23 @@ export default class ShoppingCart extends Component {
       .filter((product) => product.id === id)
       .splice(1);
     const updatedList = this.excludeProductsById(id);
-    this.setState({ cartProducts: [...removedProduct, ...updatedList] });
+    this.setState(
+      { cartProducts: [...removedProduct, ...updatedList] },
+      () => this.getCartSize(),
+    );
   };
 
   // Remove completamente produtos do carrinho de compras.
   removeProduct = (id) => {
     const updatedList = this.excludeProductsById(id);
-    this.setState({ cartProducts: [...updatedList] });
+    this.setState({ cartProducts: [...updatedList] }, () => this.getCartSize());
   };
 
   // O botão de diminuir quantidade só fica habilitado caso a quantidade de produto seja maior que 1.
   validateButton = (quantity) => quantity <= 1;
 
   render() {
-    const { cartProducts } = this.state;
+    const { cartProducts, cartSize } = this.state;
     const filteredList = this.filterList(cartProducts);
     const noCartProducts = !cartProducts || !cartProducts.length;
 
@@ -124,6 +141,7 @@ export default class ShoppingCart extends Component {
             route="/checkout"
             dataTestId="checkout-products"
             text="Finalizar compra"
+            cartSize={ cartSize }
           />
         )}
       </div>

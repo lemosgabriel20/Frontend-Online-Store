@@ -18,16 +18,18 @@ export default class Home extends Component {
     products: [],
     cartProducts: [],
     buttonClicked: false,
+    cartSize: 0,
   };
 
   componentDidMount() {
     this.setCategories();
+    this.getFromLocalStorage();
   }
 
   // Atualiza o local storage quando a página é atualizada.
   componentDidUpdate() {
-    const { cartProducts } = this.state;
-    this.addToLocalStorage(cartProducts);
+    const { cartProducts, cartSize } = this.state;
+    this.addToLocalStorage(cartProducts, cartSize);
   }
 
   // Assim que a página é carregada, as categorias de produtos são buscadas na API e setadas no estado do componente.
@@ -36,16 +38,35 @@ export default class Home extends Component {
     this.setState({ categories });
   };
 
+  // Busca produtos salvos no local storage.
+  getFromLocalStorage = () => {
+    const cartProducts = JSON.parse(localStorage.getItem('cartProducts'));
+    if (cartProducts) {
+      this.setState({ cartProducts }, () => this.getCartSize());
+    }
+  };
+
+  // Atualiza a quantidade de itens no carrinho.
+  getCartSize = () => {
+    const getCartProducts = JSON.parse(localStorage.getItem('cartProducts'));
+    if (getCartProducts) {
+      const cartSize = getCartProducts.length;
+      this.setState({ cartSize });
+    }
+  };
+
   //  Adiciona itens ao local storage.
-  addToLocalStorage = (cartProducts) => {
+  addToLocalStorage = (cartProducts, cartSize) => {
     localStorage.setItem('cartProducts', JSON.stringify(cartProducts));
+    localStorage.setItem('cartSize', JSON.stringify(cartSize));
   };
 
   // Adiciona ao cartProducts (estado) o produto clicado.
   handleAddToCart = (id) => {
     const { cartProducts, products } = this.state;
     const foundProduct = products.find((element) => element.id === id);
-    this.setState({ cartProducts: [...cartProducts, foundProduct] });
+    const updatedCartProducts = [...cartProducts, foundProduct];
+    this.setState({ cartProducts: updatedCartProducts }, () => this.getCartSize());
   };
 
   // Salva no estado o termo de pesquisa.
@@ -72,7 +93,7 @@ export default class Home extends Component {
   };
 
   render() {
-    const { search, categories, products, buttonClicked } = this.state;
+    const { search, categories, products, buttonClicked, cartSize } = this.state;
     const noResults = !products.length && buttonClicked;
 
     // Caso nenhuma pesquisa tenha sido feita ou nenhuma categoria tenha sido selecionada, a mensagem abaixo será exibida na página.
@@ -103,6 +124,7 @@ export default class Home extends Component {
           route="/cart"
           dataTestId="shopping-cart-button"
           text="Carrinho"
+          cartSize={ cartSize }
         />
 
         <Input
