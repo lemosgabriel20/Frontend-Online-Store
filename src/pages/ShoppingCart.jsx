@@ -65,10 +65,11 @@ export default class ShoppingCart extends Component {
   increaseQuantity = (id) => {
     const { cartProducts } = this.state;
     const foundProduct = cartProducts.find((product) => product.id === id);
-    this.setState(
-      { cartProducts: [...cartProducts, foundProduct] },
-      () => this.getCartSize(),
-    );
+    const foundProductQuantity = this.productQuantity(id);
+    const updatedCartProducts = [...cartProducts, foundProduct];
+    if (foundProduct.available_quantity > foundProductQuantity) {
+      this.setState({ cartProducts: updatedCartProducts }, () => this.getCartSize());
+    }
   };
 
   // Filtra o cartProducts removendo produtos com o ID informado.
